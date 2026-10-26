@@ -1,0 +1,88 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.arcade-widget {
+    width: 320px;
+    background: #2c3e50; /* deep navy reminiscent of Adventure Time sky */
+    color: #fdf6e3; /* off‑white for contrast */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: "Press Start 2P", cursive; /* retro pixel font */
+    background-image: linear-gradient(to bottom, #4a90e2, #0a3d62); /* Adventure Time sky gradient */
+    background-size: cover;
+    background-position: center;
+}
+    width: 320px;
+    background: #222;
+    color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header {
+    background: #444;
+    width: 100%;
+    text-align: center;
+    padding: 8px 0;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.menu {
+    margin: 8px 0;
+}
+
+.menu button {
+    margin: 0 4px;
+    padding: 6px 12px;
+    background: #555;
+    border: none;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.menu button:hover {
+    background: #666;
+}
+
+#game-canvas {
+    background: #000;
+    border: 2px solid #444;
+    margin-bottom: 8px;
+}
+
+.footer {
+    width: 100%;
+    text-align: center;
+    padding: 8px 0;
+    background: #444;
+}
+
+#btn-reset {
+    background: #a33;
+    border: none;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#btn-reset:hover {
+    background: #c44;
+}
