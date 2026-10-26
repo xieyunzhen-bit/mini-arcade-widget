@@ -1,27 +1,513 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Mini Arcade Widget</title>
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DAEBAK DAILY ✨ The Ultimate All-Gen K-Pop Idol Blog</title>
+  
+  <!-- Modern Editorial & Pop Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons for crisp UI icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <div class="arcade-widget">
-        <div class="header">Mini Arcade</div>
-        <div class="menu">
-            <button id="btn-snake">Snake</button>
-            <button id="btn-breakout">Breakout</button>
-            <button id="btn-flappy">Flappy Finn</button>
+<body data-theme="pop">
+
+  <!-- Background Decorative Glowing Meshes -->
+  <div class="bg-mesh-decor" aria-hidden="true">
+    <div class="decor-orb orb-1"></div>
+    <div class="decor-orb orb-2"></div>
+    <div class="decor-orb orb-3"></div>
+  </div>
+
+  <!-- Header & Sticky Navbar -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#" class="logo-area" id="logoLink">
+        <div class="logo-icon-wrap">
+          <i class="fa-solid fa-sparkles"></i>
         </div>
-            <button id="btn-snake">Snake</button>
-            <button id="btn-breakout">Breakout</button>
+        <div class="logo-text">
+          <h1>DAEBAK DAILY <span class="logo-sub-tag">K-POPVERSE</span></h1>
+          <span>All Generations • Solo to Group</span>
         </div>
-        <canvas id="game-canvas" width="300" height="300"></canvas>
-        <div class="footer">
-            <button id="btn-reset">Reset</button>
-        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><button class="nav-link-btn active" data-nav="all"><i class="fa-solid fa-fire"></i> Stories</button></li>
+          <li><button class="nav-link-btn" data-nav="timeline"><i class="fa-solid fa-timeline"></i> Gen Guide</button></li>
+          <li><button class="nav-link-btn" id="openPhotocardBtn"><i class="fa-solid fa-id-badge"></i> PC Binder</button></li>
+          <li><button class="nav-link-btn" id="openCheerWidgetBtn"><i class="fa-solid fa-wand-magic-sparkles"></i> Lightstick</button></li>
+        </ul>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="header-actions">
+        <button class="btn-icon" id="themeToggleBtn" title="Toggle Stage / Daylight Mode" aria-label="Toggle Theme">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <button class="btn-icon" id="savedPostsBtn" title="View Saved Fan Binder" aria-label="View Saved Articles">
+          <i class="fa-solid fa-bookmark"></i>
+          <span class="badge-count" id="savedCountBadge">0</span>
+        </button>
+        <button class="btn-pill-primary" id="openWriteModalBtn">
+          <i class="fa-solid fa-feather-pointed"></i> Write Post
+        </button>
+      </div>
     </div>
-    <script src="arcade.js"></script>
+  </header>
+
+  <!-- Breaking News Ticker -->
+  <div class="ticker-bar" role="marquee" aria-label="Live K-Pop comebacks and milestones">
+    <div class="container">
+      <div class="ticker-content" id="tickerStream">
+        <span class="ticker-item"><i class="fa-solid fa-star"></i> 5TH GEN: ILLIT breaks record as fastest rookie girl group to enter Billboard Hot 100!</span>
+        <span class="ticker-item"><i class="fa-solid fa-compact-disc"></i> 4TH GEN: aespa logs 300+ hourly Perfect All-Kills with 'Supernova'!</span>
+        <span class="ticker-item"><i class="fa-solid fa-crown"></i> 3RD GEN: BTS chapter two solo records exceed 15 billion global Spotify streams!</span>
+        <span class="ticker-item"><i class="fa-solid fa-microphone-lines"></i> 2ND GEN: Girls' Generation's 'Into The New World' honored as UNESCO cultural milestone!</span>
+        <span class="ticker-item"><i class="fa-solid fa-heart"></i> 1ST GEN: BoA & Lee Hyori celebrate anniversary milestones inspiring future generations!</span>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <!-- Hero Spotlight Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-grid">
+          
+          <!-- Featured Spotlight Card -->
+          <article class="hero-main-card" id="heroFeaturedCard">
+            <div>
+              <div class="hero-tag-row">
+                <span class="tag-pill tag-gen-5th">5th Gen</span>
+                <span class="tag-pill tag-type-group">Group</span>
+                <span class="tag-pill" style="background:#fce7f3; color:#db2777;">⭐ Editor's Pick</span>
+              </div>
+              <h2 id="heroTitle">ILLIT & The 'Super Real Me' Formula: How 5th Gen Redefined Magnetic Charm</h2>
+              <p id="heroSummary">From viral finger-choreography to pluggnb rhythms, explore why ILLIT's debut struck an irresistible chord with Gen Z listeners worldwide.</p>
+            </div>
+            
+            <div class="hero-meta-row">
+              <div class="author-chip">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Mina Park" class="author-avatar" id="heroAuthorImg">
+                <div class="author-info">
+                  <strong id="heroAuthorName">Mina Park</strong>
+                  <span id="heroAuthorRole">Lead K-Pop Analyst • 5 min read</span>
+                </div>
+              </div>
+              <button class="btn-pill-primary" id="heroReadBtn">
+                Read Spotlight <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </article>
+
+          <!-- Interactive Fun Column -->
+          <aside class="hero-interactive-sidebar">
+            
+            <!-- Lightstick Cheer Mini Box -->
+            <div class="cheer-mini-card">
+              <div class="cheer-header">
+                <h3><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--pink-pop);"></i> Lightstick Lounge</h3>
+                <div class="cheer-counter" id="cheerCounterText">9,842 Cheers</div>
+              </div>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.8rem;">Select your fandom color and cheer for your idols:</p>
+              
+              <div class="lightstick-picker" id="lightstickPickerRow">
+                <!-- Dynamically populated buttons from data.js -->
+              </div>
+
+              <button class="cheer-action-btn" id="cheerHeartBtn">
+                <span id="cheerLightstickEmoji">💖</span> CHEER NOW!
+              </button>
+            </div>
+
+            <!-- Bias / Song Recommendation Wheel -->
+            <div class="bias-wheel-card">
+              <div>
+                <h3><i class="fa-solid fa-shuffle" style="color:var(--purple-pop);"></i> Idol Track of the Moment</h3>
+                <p>Need a song recommendation across generations? Tap spin!</p>
+              </div>
+
+              <div class="bias-result-box" id="biasResultContainer">
+                <div class="bias-song-title" id="recSongTitle">Magnetic</div>
+                <div class="bias-artist-name" id="recArtistName">ILLIT • 5th Gen (Bubblegum Pluggnb)</div>
+              </div>
+
+              <button class="btn-pill-primary" id="spinSongBtn" style="width:100%; justify-content:center; background:var(--grad-pill-active);">
+                <i class="fa-solid fa-dice"></i> Spin Recommendation
+              </button>
+            </div>
+
+          </aside>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Generation Timeline Bar -->
+    <section class="timeline-section" id="timelineSection">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="section-subtitle">Comprehensive Hallyu Journey</span>
+          <h2 class="section-main-title">Explore by Generation & Legacy</h2>
+        </div>
+
+        <div class="gen-timeline-nav" id="genPillContainer" role="tablist">
+          <button class="gen-pill-btn active" data-gen="all">
+            All Eras <span class="pill-sub">(1st - 5th)</span>
+          </button>
+          <button class="gen-pill-btn" data-gen="5th">
+            5th Gen <span class="pill-sub">(2023-Now)</span>
+          </button>
+          <button class="gen-pill-btn" data-gen="4th">
+            4th Gen <span class="pill-sub">(2018-2022)</span>
+          </button>
+          <button class="gen-pill-btn" data-gen="3rd">
+            3rd Gen <span class="pill-sub">(2012-2017)</span>
+          </button>
+          <button class="gen-pill-btn" data-gen="2nd">
+            2nd Gen <span class="pill-sub">(2003-2011)</span>
+          </button>
+          <button class="gen-pill-btn" data-gen="1st">
+            1st Gen <span class="pill-sub">(1996-2002)</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search & Multi-Facet Filtering Section -->
+    <section class="container">
+      <div class="controls-card">
+        
+        <!-- Search bar + Sort select -->
+        <div class="search-and-sort">
+          <div class="search-box-wrap">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="searchInput" placeholder="Search by idol, group name, track, or keyword (e.g. aespa, BTS, BoA, IU, Y2K)..." aria-label="Search blog posts">
+          </div>
+
+          <select class="sort-select" id="sortSelect" aria-label="Sort blog posts">
+            <option value="newest">🔥 Newest Articles First</option>
+            <option value="likes">💖 Most Liked by Fans</option>
+            <option value="reading">⏱️ Quickest Read Time</option>
+          </select>
+        </div>
+
+        <!-- Type & Category filter chips -->
+        <div class="filter-pills-row">
+          <!-- Type Filter -->
+          <div class="filter-group">
+            <span class="filter-group-label">Idol Type:</span>
+            <button class="filter-chip active" data-type="all">All Types</button>
+            <button class="filter-chip" data-type="group"><i class="fa-solid fa-users"></i> Groups</button>
+            <button class="filter-chip" data-type="solo"><i class="fa-solid fa-star"></i> Soloists</button>
+          </div>
+
+          <!-- Category Filter -->
+          <div class="filter-group">
+            <span class="filter-group-label">Category:</span>
+            <button class="filter-chip active" data-cat="all">All Topics</button>
+            <button class="filter-chip" data-cat="Deep Dive">Deep Dive</button>
+            <button class="filter-chip" data-cat="Comebacks">Comebacks</button>
+            <button class="filter-chip" data-cat="Culture & History">History & Legacy</button>
+            <button class="filter-chip" data-cat="Fashion & MV">Fashion & MVs</button>
+            <button class="filter-chip" data-cat="Spotlight">Spotlight</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Live Post Count & Reset Hint -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; padding: 0 0.5rem;">
+        <span id="resultsCountText" style="font-weight:700; color:var(--text-muted); font-size:0.95rem;">Showing 12 curated stories</span>
+        <button id="resetFiltersBtn" style="background:none; border:none; color:var(--pink-pop); font-weight:700; cursor:pointer; font-size:0.85rem; display:none;">
+          <i class="fa-solid fa-rotate-left"></i> Reset all filters
+        </button>
+      </div>
+
+      <!-- Main Blog Post Grid -->
+      <div class="posts-grid" id="postsGrid">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================================
+       MODAL 1: FULL ARTICLE READER MODAL
+       ========================================================================= -->
+  <div class="modal-overlay" id="articleModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-content-card">
+      <button class="modal-close-btn" id="closeArticleModalBtn" aria-label="Close article reader">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Banner -->
+      <div class="modal-header-banner">
+        <img src="" alt="" class="modal-cover-img" id="modalCoverImg">
+        <div class="modal-banner-gradient"></div>
+        <div class="modal-header-meta">
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.5rem;" id="modalBadges"></div>
+          <h2 id="modalTitle">Article Title Goes Here</h2>
+          <div style="display:flex; align-items:center; gap:1rem; margin-top:0.6rem; color:rgba(255,255,255,0.85); font-size:0.88rem;">
+            <span id="modalAuthorName">By Author</span>
+            <span>•</span>
+            <span id="modalDate">Date</span>
+            <span>•</span>
+            <span id="modalReadTime">Read time</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Article Body -->
+      <div class="modal-body-article">
+        <!-- Spotlight Audio preview bar -->
+        <div class="article-spotlight-bar" id="modalTrackBar">
+          <div class="spotlight-info">
+            <strong>Featured Era Track</strong>
+            <span id="modalTrackName">ILLIT - Magnetic</span>
+          </div>
+          <button class="btn-pill-primary" id="playAudioChimeBtn" style="padding:0.5rem 1rem; font-size:0.85rem;">
+            <i class="fa-solid fa-play"></i> Play Sound Bite
+          </button>
+        </div>
+
+        <div id="modalArticleText">
+          <!-- Populated by JavaScript -->
+        </div>
+
+        <!-- Tags Row -->
+        <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:2rem;" id="modalTagsContainer"></div>
+      </div>
+
+      <!-- Comments Section -->
+      <div class="modal-comments-section">
+        <div class="comments-header">
+          <h4><i class="fa-solid fa-comments" style="color:var(--pink-pop);"></i> Fan Discussion & Cheering</h4>
+          <span style="font-size:0.85rem; color:var(--text-muted);" id="commentsCountHeader">0 comments</span>
+        </div>
+
+        <!-- Comment Input -->
+        <form class="comment-input-form" id="commentForm">
+          <div class="comment-inputs-row">
+            <input type="text" id="commentAuthorInput" placeholder="Your nickname (e.g. SeoulBlink99)" required>
+            <input type="text" id="commentBiasInput" placeholder="Your Bias (e.g. Karina, V, Taeyeon)">
+          </div>
+          <textarea id="commentTextInput" rows="3" placeholder="Share your thoughts on this comeback, stage styling, or idol..." required></textarea>
+          <button type="submit" class="btn-pill-primary" style="align-self:flex-start;">
+            <i class="fa-solid fa-paper-plane"></i> Post Comment
+          </button>
+        </form>
+
+        <!-- Comments List -->
+        <div class="comment-list" id="modalCommentsList">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 2: INTERACTIVE HOLOGRAPHIC PHOTOCARD BINDER
+       ========================================================================= -->
+  <div class="modal-overlay" id="photocardModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-content-card" style="max-width:960px;">
+      <button class="modal-close-btn" id="closePhotocardModalBtn" aria-label="Close photocard binder">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div style="padding:2.5rem 2.5rem 1rem;">
+        <div style="text-align:center; margin-bottom:1.5rem;">
+          <span class="section-subtitle">Official Fandom Binder</span>
+          <h2 style="font-size:1.8rem; font-weight:800;">Collectable Holographic Photocards ✨</h2>
+          <p style="color:var(--text-muted); font-size:0.95rem; margin-top:0.35rem;">Hover or tap any card to reveal the holographic foil! Click card to flip and read the secret idol message!</p>
+        </div>
+
+        <div class="binder-grid" id="photocardGrid">
+          <!-- Dynamically generated from data.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 3: WRITE A FAN POST FORM
+       ========================================================================= -->
+  <div class="modal-overlay" id="writeModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-content-card" style="max-width:680px;">
+      <button class="modal-close-btn" id="closeWriteModalBtn" aria-label="Close post editor">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div style="padding:2.5rem;">
+        <div style="margin-bottom:1.5rem;">
+          <span class="section-subtitle">Community Voice</span>
+          <h2 style="font-size:1.8rem; font-weight:800;">Publish Your K-Pop Story ✍️</h2>
+          <p style="color:var(--text-muted); font-size:0.9rem;">Share your review, comeback theory, or idol tribute with fellow fans across the globe.</p>
+        </div>
+
+        <form id="writePostForm">
+          <div class="form-group">
+            <label for="postTitleInput">Article Title *</label>
+            <input type="text" id="postTitleInput" placeholder="e.g. Why TWS's Live Stages Are The Purest Breath of Fresh Air" required>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="postGenSelect">Generation *</label>
+              <select id="postGenSelect" required>
+                <option value="5th">5th Gen (2023 - Present)</option>
+                <option value="4th">4th Gen (2018 - 2022)</option>
+                <option value="3rd">3rd Gen (2012 - 2017)</option>
+                <option value="2nd">2nd Gen (2003 - 2011)</option>
+                <option value="1st">1st Gen (1996 - 2002)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="postTypeSelect">Idol Format *</label>
+              <select id="postTypeSelect" required>
+                <option value="group">Group 👥</option>
+                <option value="solo">Soloist 🌟</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="postCategorySelect">Category *</label>
+              <select id="postCategorySelect" required>
+                <option value="Comebacks">Comebacks</option>
+                <option value="Deep Dive">Deep Dive</option>
+                <option value="Culture & History">Culture & History</option>
+                <option value="Fashion & MV">Fashion & MV</option>
+                <option value="Spotlight">Spotlight</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="postAuthorInput">Author Name *</label>
+              <input type="text" id="postAuthorInput" placeholder="Your name / Pen name" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="postImageInput">Cover Image URL (Optional - leave empty for auto aesthetic image)</label>
+            <input type="url" id="postImageInput" placeholder="https://images.unsplash.com/...">
+          </div>
+
+          <div class="form-group">
+            <label for="postSummaryInput">Short Hook / Summary (1-2 sentences) *</label>
+            <input type="text" id="postSummaryInput" placeholder="Brief summary to entice readers..." required>
+          </div>
+
+          <div class="form-group">
+            <label for="postContentInput">Full Article Content (HTML or Paragraphs) *</label>
+            <textarea id="postContentInput" rows="6" placeholder="Write your full story here..." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="postTagsInput">Tags (comma-separated)</label>
+            <input type="text" id="postTagsInput" placeholder="e.g. Stray Kids, Comeback, Live Vocals">
+          </div>
+
+          <button type="submit" class="btn-pill-primary" style="width:100%; justify-content:center; padding:0.9rem; font-size:1.05rem;">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Publish to DAEBAK DAILY
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 4: SAVED BOOKMARKS / FAN BINDER DRAWER
+       ========================================================================= -->
+  <div class="modal-overlay" id="savedModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-content-card" style="max-width:700px;">
+      <button class="modal-close-btn" id="closeSavedModalBtn" aria-label="Close saved drawer">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div style="padding:2.5rem;">
+        <div style="margin-bottom:1.5rem;">
+          <span class="section-subtitle">Personal Vault</span>
+          <h2 style="font-size:1.8rem; font-weight:800;">My Fan Binder & Bookmarks 📑</h2>
+          <p style="color:var(--text-muted); font-size:0.9rem;">Quickly jump back to your favorite K-pop deep dives and idol features.</p>
+        </div>
+
+        <div id="savedListContainer" style="display:flex; flex-direction:column; gap:1rem;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="logo-area" style="margin-bottom:1rem;">
+            <div class="logo-icon-wrap" style="width:36px; height:36px; font-size:1.1rem;">
+              <i class="fa-solid fa-sparkles"></i>
+            </div>
+            <div class="logo-text">
+              <h3 style="font-size:1.2rem; font-weight:800; background:var(--grad-logo); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">DAEBAK DAILY</h3>
+            </div>
+          </div>
+          <p>Your vibrant sanctuary for everything Korean pop culture. Chronicling every era from 1st Gen pioneers (BoA, S.E.S., H.O.T.) to 5th Gen chart disruptors (ILLIT, RIIZE, BABYMONSTER).</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Generations</h4>
+          <ul class="footer-links">
+            <li><a href="#" data-footer-gen="5th">5th Gen (2023 - Present)</a></li>
+            <li><a href="#" data-footer-gen="4th">4th Gen (2018 - 2022)</a></li>
+            <li><a href="#" data-footer-gen="3rd">3rd Gen (2012 - 2017)</a></li>
+            <li><a href="#" data-footer-gen="2nd">2nd Gen (2003 - 2011)</a></li>
+            <li><a href="#" data-footer-gen="1st">1st Gen (1996 - 2002)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Categories</h4>
+          <ul class="footer-links">
+            <li><a href="#" data-footer-cat="Comebacks">Comeback Reviews</a></li>
+            <li><a href="#" data-footer-cat="Deep Dive">Musical Deep Dives</a></li>
+            <li><a href="#" data-footer-cat="Fashion & MV">Fashion & Aesthetics</a></li>
+            <li><a href="#" data-footer-cat="Spotlight">Soloist Spotlights</a></li>
+            <li><a href="#" data-footer-cat="Culture & History">Hallyu History</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Fan Lounge</h4>
+          <p style="margin-bottom:0.75rem;">Created with passion for fans worldwide. Sound bites, photocards, and cheer effects work right inside your browser!</p>
+          <div style="display:flex; gap:0.6rem;">
+            <button class="btn-icon" style="width:36px; height:36px;" title="Twitter / X"><i class="fa-brands fa-x-twitter"></i></button>
+            <button class="btn-icon" style="width:36px; height:36px;" title="Instagram"><i class="fa-brands fa-instagram"></i></button>
+            <button class="btn-icon" style="width:36px; height:36px;" title="YouTube"><i class="fa-brands fa-youtube"></i></button>
+            <button class="btn-icon" style="width:36px; height:36px;" title="Spotify"><i class="fa-brands fa-spotify"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 DAEBAK DAILY. Made with <span style="color:var(--pink-pop);">💖</span> for K-Pop Stan Universe worldwide. All generations celebrated.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
-
