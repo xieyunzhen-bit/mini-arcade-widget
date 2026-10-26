@@ -28,7 +28,6 @@
             overflow-x: hidden;
         }
 
-        /* Cartoon Clouds */
         .clouds {
             position: fixed;
             top: 0;
@@ -64,7 +63,6 @@
             align-items: center;
         }
 
-        /* Top Header */
         .bmo-header {
             display: flex;
             flex-direction: column;
@@ -87,7 +85,7 @@
             text-shadow: 1px 1px 0 #18443c;
         }
 
-        /* Screen Frame */
+        /* SCREEN BEZEL */
         .screen-bezel {
             width: 100%;
             background: #24584f;
@@ -98,13 +96,14 @@
             flex-direction: column;
             align-items: center;
             box-shadow: inset 0 6px 12px rgba(0,0,0,0.5);
+            position: relative;
         }
 
         .screen-top-bar {
             width: 100%;
             display: flex;
             justify-content: space-between;
-            font-size: 0.55rem;
+            font-size: 0.52rem;
             color: #6cf9d8;
             margin-bottom: 8px;
             padding: 0 4px;
@@ -124,14 +123,14 @@
 
         .screen-help {
             margin-top: 6px;
-            font-size: 0.5rem;
+            font-size: 0.48rem;
             color: #a4ecd9;
             text-align: center;
             min-height: 14px;
             line-height: 1.3;
         }
 
-        /* Buttons Section */
+        /* CONTROLS */
         .controls-area {
             width: 100%;
             margin-top: 14px;
@@ -148,15 +147,15 @@
 
         .game-tab-btn {
             font-family: 'Press Start 2P', monospace;
-            font-size: 0.62rem;
-            padding: 8px 10px;
+            font-size: 0.6rem;
+            padding: 9px 10px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
             transition: transform 0.08s, box-shadow 0.08s;
         }
 
@@ -185,7 +184,14 @@
         }
         .tab-red:active { box-shadow: 0 1px 0 #b33939; }
 
-        /* D-PAD & ACTION */
+        .tab-purple {
+            background: #a29bfe;
+            color: #2c215c;
+            box-shadow: 0 4px 0 #6c5ce7;
+        }
+        .tab-purple:active { box-shadow: 0 1px 0 #6c5ce7; }
+
+        /* HARDWARE CONTROLS */
         .bottom-hardware {
             display: flex;
             justify-content: space-between;
@@ -209,7 +215,8 @@
             background: #ffd32a;
             border: 2px solid #94790e;
             color: #554402;
-            font-size: 0.65rem;
+            font-size: 0.85rem;
+            font-weight: bold;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -217,6 +224,7 @@
             box-shadow: 0 3px 0 #7b650a;
             border-radius: 4px;
             padding: 0;
+            line-height: 1;
         }
         .dpad-key:active {
             transform: translateY(2px);
@@ -277,7 +285,7 @@
         <div class="screen-bezel">
             <div class="screen-top-bar">
                 <span id="title-text">SELECT GAME</span>
-                <span id="score-text">SCORE: 00</span>
+                <span id="score-text">SCORE: 00 | HI: 00</span>
             </div>
             <canvas id="game-canvas" width="300" height="300"></canvas>
             <div class="screen-help" id="help-text">Tap a game below to play!</div>
@@ -286,23 +294,30 @@
         <div class="controls-area">
             <div class="game-menu-buttons">
                 <button id="btn-snake" class="game-tab-btn tab-yellow">
-                    <span>ðŸ¶</span> JAKE (SNAKE)
+                    <span>[+] JAKE SNAKE</span>
+                    <span id="hi-snake">HI: 0</span>
                 </button>
                 <button id="btn-breakout" class="game-tab-btn tab-blue">
-                    <span>ðŸ¬</span> CANDY BREAKOUT
+                    <span>[*] CANDY BREAKOUT</span>
+                    <span id="hi-breakout">HI: 0</span>
                 </button>
                 <button id="btn-flappy" class="game-tab-btn tab-red">
-                    <span>âš”ï¸</span> FLAPPY FINN
+                    <span>[^] FLAPPY FINN</span>
+                    <span id="hi-flappy">HI: 0</span>
+                </button>
+                <button id="btn-dashboard" class="game-tab-btn tab-purple">
+                    <span>[#] HIGH SCORE BOARD</span>
+                    <span>VIEW</span>
                 </button>
             </div>
 
             <div class="bottom-hardware">
                 <div class="dpad">
-                    <button id="pad-up" class="dpad-key up">â–²</button>
-                    <button id="pad-left" class="dpad-key left">â—€</button>
+                    <button id="pad-up" class="dpad-key up">&uarr;</button>
+                    <button id="pad-left" class="dpad-key left">&larr;</button>
                     <div class="dpad-core"></div>
-                    <button id="pad-right" class="dpad-key right">â–¶</button>
-                    <button id="pad-down" class="dpad-key down">â–¼</button>
+                    <button id="pad-right" class="dpad-key right">&rarr;</button>
+                    <button id="pad-down" class="dpad-key down">&darr;</button>
                 </div>
 
                 <div class="action-btns">
@@ -327,23 +342,66 @@
         const btnSnake = document.getElementById('btn-snake');
         const btnBreakout = document.getElementById('btn-breakout');
         const btnFlappy = document.getElementById('btn-flappy');
+        const btnDashboard = document.getElementById('btn-dashboard');
         const btnReset = document.getElementById('reset-btn');
         const btnAction = document.getElementById('action-btn');
+
+        const hiSnakeEl = document.getElementById('hi-snake');
+        const hiBreakoutEl = document.getElementById('hi-breakout');
+        const hiFlappyEl = document.getElementById('hi-flappy');
 
         const padUp = document.getElementById('pad-up');
         const padDown = document.getElementById('pad-down');
         const padLeft = document.getElementById('pad-left');
         const padRight = document.getElementById('pad-right');
 
-        let currentGame = 'idle'; // 'idle', 'snake', 'breakout', 'flappy'
-        let score = 0;
+        let currentGame = 'idle'; // 'idle', 'snake', 'breakout', 'flappy', 'scores'
+        let currentScore = 0;
+        let isGameOver = false;
+        let newHighScoreAchieved = false;
 
-        function setScore(val) {
-            score = val;
-            scoreText.textContent = `SCORE: ${score.toString().padStart(2, '0')}`;
+        // --- HIGH SCORES STORAGE ---
+        const highScores = {
+            snake: parseInt(localStorage.getItem('bmo_hi_snake') || '0', 10),
+            breakout: parseInt(localStorage.getItem('bmo_hi_breakout') || '0', 10),
+            flappy: parseInt(localStorage.getItem('bmo_hi_flappy') || '0', 10)
+        };
+
+        function updateHighScoreDisplays() {
+            hiSnakeEl.textContent = `HI: ${highScores.snake}`;
+            hiBreakoutEl.textContent = `HI: ${highScores.breakout}`;
+            hiFlappyEl.textContent = `HI: ${highScores.flappy}`;
+        }
+        updateHighScoreDisplays();
+
+        function getActiveHighScore() {
+            if (currentGame === 'snake') return highScores.snake;
+            if (currentGame === 'breakout') return highScores.breakout;
+            if (currentGame === 'flappy') return highScores.flappy;
+            return 0;
         }
 
-        // --- RETRO SOUND SYNTHESIZER ---
+        function setScore(val) {
+            currentScore = val;
+            const hi = getActiveHighScore();
+            if (currentScore > hi) {
+                newHighScoreAchieved = true;
+                if (currentGame === 'snake') {
+                    highScores.snake = currentScore;
+                    localStorage.setItem('bmo_hi_snake', currentScore);
+                } else if (currentGame === 'breakout') {
+                    highScores.breakout = currentScore;
+                    localStorage.setItem('bmo_hi_breakout', currentScore);
+                } else if (currentGame === 'flappy') {
+                    highScores.flappy = currentScore;
+                    localStorage.setItem('bmo_hi_flappy', currentScore);
+                }
+                updateHighScoreDisplays();
+            }
+            scoreText.textContent = `SCORE: ${currentScore} | HI: ${getActiveHighScore()}`;
+        }
+
+        // --- SOUND EFFECTS ---
         const audioCtx = window.AudioContext ? new AudioContext() : null;
         function playBeep(freq, type = 'sine', duration = 0.08) {
             if (!audioCtx) return;
@@ -353,13 +411,46 @@
                 const gain = audioCtx.createGain();
                 osc.type = type;
                 osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 osc.start();
                 osc.stop(audioCtx.currentTime + duration);
             } catch(e) {}
+        }
+
+        // --- GAME OVER TRIGGER ---
+        function triggerGameOver(gameName) {
+            isGameOver = true;
+            playBeep(130, 'sawtooth', 0.35);
+            helpText.textContent = 'GAME OVER! Tap ACTION to Retry!';
+        }
+
+        function drawGameOverOverlay() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+            ctx.fillRect(0, 0, W, H);
+
+            ctx.fillStyle = '#ff4757';
+            ctx.font = '14px "Press Start 2P", monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText('GAME OVER!', W / 2, 85);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '9px "Press Start 2P", monospace';
+            ctx.fillText(`SCORE: ${currentScore}`, W / 2, 125);
+            ctx.fillText(`BEST:  ${getActiveHighScore()}`, W / 2, 145);
+
+            if (newHighScoreAchieved) {
+                ctx.fillStyle = '#ffd32a';
+                ctx.font = '10px "Press Start 2P", monospace';
+                ctx.fillText('â˜… NEW HIGH SCORE! â˜…', W / 2, 185);
+            }
+
+            ctx.fillStyle = '#1dd1a1';
+            ctx.font = '8px "Press Start 2P", monospace';
+            ctx.fillText('PRESS ACTION OR TAP', W / 2, 230);
+            ctx.fillText('TO PLAY AGAIN', W / 2, 250);
         }
 
         // ==========================================
@@ -372,7 +463,6 @@
                 if (bmoTimer > 4) bmoTimer = 0;
             },
             draw() {
-                // Soft teal screen
                 ctx.fillStyle = '#65d5ba';
                 ctx.fillRect(0, 0, W, H);
 
@@ -389,26 +479,67 @@
                     ctx.fill();
                 }
 
-                // Smiling mouth
                 ctx.beginPath();
                 ctx.lineWidth = 5;
                 ctx.strokeStyle = '#143c33';
                 ctx.arc(150, 140, 24, 0.1 * Math.PI, 0.9 * Math.PI, false);
                 ctx.stroke();
 
-                // Rosy cheeks
                 ctx.fillStyle = '#9fe9d8';
                 ctx.beginPath();
                 ctx.arc(65, 135, 10, 0, Math.PI * 2);
                 ctx.arc(235, 135, 10, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Welcome message
                 ctx.fillStyle = '#143c33';
                 ctx.font = '9px "Press Start 2P", monospace';
                 ctx.textAlign = 'center';
                 ctx.fillText('HI! I AM BMO!', W / 2, 215);
                 ctx.fillText('PICK A GAME BELOW!', W / 2, 238);
+            }
+        };
+
+        // ==========================================
+        // HIGH SCORE DASHBOARD SCREEN
+        // ==========================================
+        const scoreBoard = {
+            draw() {
+                ctx.fillStyle = '#2c215c';
+                ctx.fillRect(0, 0, W, H);
+
+                ctx.fillStyle = '#ffd32a';
+                ctx.font = '11px "Press Start 2P", monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('HIGH SCORE BOARD', W / 2, 50);
+
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(30, 65, 240, 3);
+
+                ctx.font = '9px "Press Start 2P", monospace';
+                ctx.textAlign = 'left';
+
+                ctx.fillStyle = '#fbc531';
+                ctx.fillText('JAKE SNAKE:', 40, 105);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillText(`${highScores.snake} PTS`, 180, 105);
+
+                ctx.fillStyle = '#48dbfb';
+                ctx.fillText('BREAKOUT:', 40, 145);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillText(`${highScores.breakout} PTS`, 180, 145);
+
+                ctx.fillStyle = '#ff6b6b';
+                ctx.fillText('FLAPPY FINN:', 40, 185);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillText(`${highScores.flappy} PTS`, 180, 185);
+
+                ctx.fillStyle = '#a29bfe';
+                ctx.fillRect(30, 215, 240, 2);
+
+                ctx.fillStyle = '#6cf9d8';
+                ctx.textAlign = 'center';
+                ctx.font = '8px "Press Start 2P", monospace';
+                ctx.fillText('BEAT THEM TO UPDATE!', W / 2, 250);
             }
         };
 
@@ -424,8 +555,10 @@
             nextDir: { x: 1, y: 0 },
             food: { x: 5, y: 5 },
             timer: 0,
-            speed: 0.13,
+            speed: 0.12,
             init() {
+                isGameOver = false;
+                newHighScoreAchieved = false;
                 this.snake = [
                     { x: 5, y: 7 },
                     { x: 4, y: 7 },
@@ -450,6 +583,7 @@
                 if (d === 'RIGHT' && this.dir.x === 0) this.nextDir = { x: 1, y: 0 };
             },
             update(dt) {
+                if (isGameOver) return;
                 this.timer += dt;
                 if (this.timer >= this.speed) {
                     this.timer = 0;
@@ -459,10 +593,9 @@
                         y: (this.snake[0].y + this.dir.y + this.rows) % this.rows
                     };
 
-                    // Crash into self
+                    // Crash into self -> GAME OVER
                     if (this.snake.some(s => s.x === head.x && s.y === head.y)) {
-                        playBeep(140, 'sawtooth', 0.2);
-                        this.init();
+                        triggerGameOver('snake');
                         return;
                     }
 
@@ -471,7 +604,7 @@
                     // Eat food
                     if (head.x === this.food.x && head.y === this.food.y) {
                         playBeep(520, 'square', 0.1);
-                        setScore(score + 10);
+                        setScore(currentScore + 10);
                         this.spawnFood();
                     } else {
                         this.snake.pop();
@@ -479,7 +612,6 @@
                 }
             },
             draw() {
-                // Land of Ooo grass
                 ctx.fillStyle = '#6ab04c';
                 ctx.fillRect(0, 0, W, H);
 
@@ -490,7 +622,7 @@
                 ctx.beginPath();
                 ctx.ellipse(fx + 10, fy + 11, 7, 5, 0, 0, Math.PI * 2);
                 ctx.fill();
-                ctx.fillStyle = '#f1c40f'; // Butter
+                ctx.fillStyle = '#f1c40f';
                 ctx.fillRect(fx + 8, fy + 5, 4, 3);
 
                 // Jake Segments
@@ -498,11 +630,10 @@
                     const sx = seg.x * this.grid;
                     const sy = seg.y * this.grid;
 
-                    ctx.fillStyle = '#f9ca24'; // Jake Golden Yellow
+                    ctx.fillStyle = '#f9ca24';
                     ctx.fillRect(sx + 1, sy + 1, 18, 18);
 
                     if (i === 0) {
-                        // Big round Jake eyes
                         ctx.fillStyle = '#ffffff';
                         ctx.beginPath();
                         ctx.arc(sx + 6, sy + 6, 4, 0, Math.PI * 2);
@@ -515,13 +646,14 @@
                         ctx.arc(sx + 14 + this.dir.x, sy + 6 + this.dir.y, 2, 0, Math.PI * 2);
                         ctx.fill();
 
-                        // Jowls
                         ctx.fillStyle = '#f6b93b';
                         ctx.beginPath();
                         ctx.ellipse(sx + 10, sy + 13, 5, 3, 0, 0, Math.PI * 2);
                         ctx.fill();
                     }
                 });
+
+                if (isGameOver) drawGameOverOverlay();
             }
         };
 
@@ -536,6 +668,8 @@
             left: false,
             right: false,
             init() {
+                isGameOver = false;
+                newHighScoreAchieved = false;
                 this.paddle.x = W / 2 - this.paddle.w / 2;
                 this.ball.x = W / 2;
                 this.ball.y = 200;
@@ -556,13 +690,15 @@
                     }
                 }
                 setScore(0);
-                helpText.textContent = 'â—€ â–¶ Arrows or D-Pad to move blade!';
+                helpText.textContent = '&larr; &rarr; Arrows or D-Pad to move sword!';
             },
             input(d, state) {
                 if (d === 'LEFT') this.left = state;
                 if (d === 'RIGHT') this.right = state;
             },
             update(dt) {
+                if (isGameOver) return;
+
                 if (this.left) this.paddle.x -= this.paddle.speed * dt;
                 if (this.right) this.paddle.x += this.paddle.speed * dt;
                 if (this.paddle.x < 0) this.paddle.x = 0;
@@ -571,7 +707,6 @@
                 this.ball.x += this.ball.vx * dt;
                 this.ball.y += this.ball.vy * dt;
 
-                // Walls
                 if (this.ball.x - this.ball.r <= 0) {
                     this.ball.x = this.ball.r;
                     this.ball.vx *= -1;
@@ -588,10 +723,9 @@
                     playBeep(300);
                 }
 
-                // Drop bottom
+                // Drop bottom -> GAME OVER
                 if (this.ball.y - this.ball.r > H) {
-                    playBeep(120, 'sawtooth', 0.25);
-                    this.init();
+                    triggerGameOver('breakout');
                     return;
                 }
 
@@ -621,17 +755,15 @@
                         b.alive = false;
                         this.ball.vy *= -1;
                         playBeep(650, 'square');
-                        setScore(score + 5);
+                        setScore(currentScore + 5);
                         break;
                     }
                 }
             },
             draw() {
-                // Castle wall background
                 ctx.fillStyle = '#2f3640';
                 ctx.fillRect(0, 0, W, H);
 
-                // Bricks
                 for (const b of this.bricks) {
                     if (!b.alive) continue;
                     ctx.fillStyle = b.color;
@@ -640,22 +772,22 @@
                     ctx.fillRect(b.x + 2, b.y + 2, b.w - 4, 3);
                 }
 
-                // Finn Golden Sword Paddle
                 ctx.fillStyle = '#fbc531';
                 ctx.fillRect(this.paddle.x, this.paddle.y, this.paddle.w, this.paddle.h);
-                ctx.fillStyle = '#4cd137'; // Sword grip
+                ctx.fillStyle = '#4cd137';
                 ctx.fillRect(this.paddle.x + this.paddle.w / 2 - 8, this.paddle.y + 3, 16, 4);
 
-                // Glowing Ball
                 ctx.fillStyle = '#ff4757';
                 ctx.beginPath();
                 ctx.arc(this.ball.x, this.ball.y, this.ball.r, 0, Math.PI * 2);
                 ctx.fill();
+
+                if (isGameOver) drawGameOverOverlay();
             }
         };
 
         // ==========================================
-        // 3. FLAPPY FINN (SUPER SMOOTH & FULLY WORKING!)
+        // 3. FLAPPY FINN
         // ==========================================
         const flappyGame = {
             finn: { x: 45, y: 130, w: 24, h: 24, vy: 0 },
@@ -666,6 +798,8 @@
             gap: 92,
             speed: 110,
             init() {
+                isGameOver = false;
+                newHighScoreAchieved = false;
                 this.finn = { x: 45, y: 130, w: 24, h: 24, vy: 0 };
                 this.pipes = [];
                 this.pipeTimer = 0;
@@ -673,15 +807,19 @@
                 helpText.textContent = 'SPACE / TAP / ACTION to make Finn flap!';
             },
             flap() {
+                if (isGameOver) {
+                    this.init();
+                    return;
+                }
                 this.finn.vy = this.flapForce;
                 playBeep(450, 'sine', 0.08);
             },
             update(dt) {
-                // Gravity
+                if (isGameOver) return;
+
                 this.finn.vy += this.gravity * dt;
                 this.finn.y += this.finn.vy * dt;
 
-                // Spawn Peppermint Pillars
                 this.pipeTimer += dt;
                 if (this.pipeTimer >= 1.7) {
                     this.pipeTimer = 0;
@@ -697,28 +835,25 @@
                     });
                 }
 
-                // Move & collide
                 for (let i = this.pipes.length - 1; i >= 0; i--) {
                     const p = this.pipes[i];
                     p.x -= this.speed * dt;
 
-                    // Score
                     if (!p.scored && p.x + p.w < this.finn.x) {
                         p.scored = true;
-                        setScore(score + 1);
+                        setScore(currentScore + 1);
                         playBeep(700, 'square', 0.1);
                     }
 
-                    // Collision
                     const fx = this.finn.x;
                     const fy = this.finn.y;
                     const fw = this.finn.w;
                     const fh = this.finn.h;
 
+                    // Pipe crash -> GAME OVER
                     if (fx + fw > p.x && fx < p.x + p.w) {
                         if (fy < p.topH || fy + fh > p.botY) {
-                            playBeep(130, 'sawtooth', 0.2);
-                            this.init();
+                            triggerGameOver('flappy');
                             return;
                         }
                     }
@@ -726,18 +861,15 @@
                     if (p.x + p.w < 0) this.pipes.splice(i, 1);
                 }
 
-                // Ceil / Floor hit
+                // Floor / Ceil crash -> GAME OVER
                 if (this.finn.y + this.finn.h >= H || this.finn.y < 0) {
-                    playBeep(130, 'sawtooth', 0.2);
-                    this.init();
+                    triggerGameOver('flappy');
                 }
             },
             draw() {
-                // Sky
                 ctx.fillStyle = '#70a1ff';
                 ctx.fillRect(0, 0, W, H);
 
-                // Fluffy clouds
                 ctx.fillStyle = '#ffffff';
                 ctx.beginPath();
                 ctx.arc(70, 45, 18, 0, Math.PI * 2);
@@ -745,9 +877,7 @@
                 ctx.arc(120, 45, 16, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Draw Peppermint candy pipes
                 for (const p of this.pipes) {
-                    // Top pipe
                     ctx.fillStyle = '#ff4757';
                     ctx.fillRect(p.x, 0, p.w, p.topH);
                     ctx.fillStyle = '#ffffff';
@@ -758,7 +888,6 @@
                     ctx.lineWidth = 2;
                     ctx.strokeRect(p.x, 0, p.w, p.topH);
 
-                    // Bottom pipe
                     const botH = H - p.botY;
                     ctx.fillStyle = '#ff4757';
                     ctx.fillRect(p.x, p.botY, p.w, botH);
@@ -769,45 +898,44 @@
                     ctx.strokeRect(p.x, p.botY, p.w, botH);
                 }
 
-                // DRAW FINN THE HUMAN SPRITE
+                // Finn character
                 const fx = this.finn.x;
                 const fy = this.finn.y;
 
-                // Green Backpack
                 ctx.fillStyle = '#2ed573';
                 ctx.fillRect(fx - 4, fy + 7, 5, 11);
 
-                // White Hat
                 ctx.fillStyle = '#ffffff';
                 ctx.fillRect(fx, fy, 22, 22);
-                // Bear ears
                 ctx.fillRect(fx + 2, fy - 3, 5, 4);
                 ctx.fillRect(fx + 15, fy - 3, 5, 4);
 
-                // Face hole
                 ctx.fillStyle = '#ffc085';
                 ctx.fillRect(fx + 5, fy + 5, 14, 11);
 
-                // Eyes & Smile
                 ctx.fillStyle = '#1e272e';
                 ctx.fillRect(fx + 9, fy + 8, 2, 3);
                 ctx.fillRect(fx + 15, fy + 8, 2, 3);
                 ctx.fillRect(fx + 11, fy + 13, 4, 1);
 
-                // Blue shirt
                 ctx.fillStyle = '#3742fa';
                 ctx.fillRect(fx + 3, fy + 20, 16, 4);
+
+                if (isGameOver) drawGameOverOverlay();
             }
         };
 
         // ==========================================
-        // ROUTING & USER INPUT
+        // GAME SELECTION & CONTROLS
         // ==========================================
         function pickGame(name) {
             playBeep(350, 'triangle', 0.05);
             currentGame = name;
+            isGameOver = false;
+            newHighScoreAchieved = false;
+
             if (name === 'snake') {
-                titleText.textContent = 'JAKE (SNAKE)';
+                titleText.textContent = 'JAKE SNAKE';
                 snakeGame.init();
             } else if (name === 'breakout') {
                 titleText.textContent = 'CANDY BREAKOUT';
@@ -815,12 +943,17 @@
             } else if (name === 'flappy') {
                 titleText.textContent = 'FLAPPY FINN';
                 flappyGame.init();
+            } else if (name === 'scores') {
+                titleText.textContent = 'HIGH SCORES';
+                scoreText.textContent = 'ALL-TIME BESTS';
+                helpText.textContent = 'Pick a game to beat your records!';
             }
         }
 
         btnSnake.addEventListener('click', () => pickGame('snake'));
         btnBreakout.addEventListener('click', () => pickGame('breakout'));
         btnFlappy.addEventListener('click', () => pickGame('flappy'));
+        btnDashboard.addEventListener('click', () => pickGame('scores'));
 
         btnReset.addEventListener('click', () => {
             playBeep(200, 'square', 0.08);
@@ -829,15 +962,21 @@
             if (currentGame === 'flappy') flappyGame.init();
         });
 
-        // ACTION BUTTON & SCREEN CLICK = FLAP
-        function doAction() {
+        function handleAction() {
+            if (isGameOver) {
+                if (currentGame === 'snake') snakeGame.init();
+                if (currentGame === 'breakout') breakoutGame.init();
+                if (currentGame === 'flappy') flappyGame.init();
+                return;
+            }
             if (currentGame === 'flappy') flappyGame.flap();
         }
-        btnAction.addEventListener('pointerdown', doAction);
-        canvas.addEventListener('pointerdown', doAction);
 
-        // D-PAD CONTROLS
+        btnAction.addEventListener('pointerdown', handleAction);
+        canvas.addEventListener('pointerdown', handleAction);
+
         padUp.addEventListener('pointerdown', () => {
+            if (isGameOver) { handleAction(); return; }
             if (currentGame === 'snake') snakeGame.input('UP');
             if (currentGame === 'flappy') flappyGame.flap();
         });
@@ -859,9 +998,13 @@
             if (currentGame === 'breakout') breakoutGame.input('RIGHT', false);
         });
 
-        // KEYBOARD
         window.addEventListener('keydown', e => {
             if (e.repeat) return;
+            if (isGameOver && (e.key === ' ' || e.key === 'Enter')) {
+                handleAction();
+                return;
+            }
+
             if (currentGame === 'snake') {
                 if (e.key === 'ArrowUp' || e.key === 'w') snakeGame.input('UP');
                 if (e.key === 'ArrowDown' || e.key === 's') snakeGame.input('DOWN');
@@ -884,7 +1027,7 @@
             }
         });
 
-        // MAIN ANIMATION LOOP
+        // ANIMATION LOOP
         let last = performance.now();
         function loop(now) {
             const dt = Math.min((now - last) / 1000, 0.1);
@@ -899,6 +1042,8 @@
             } else if (currentGame === 'flappy') {
                 flappyGame.update(dt);
                 flappyGame.draw();
+            } else if (currentGame === 'scores') {
+                scoreBoard.draw();
             } else {
                 bmoIdle.update(dt);
                 bmoIdle.draw();
